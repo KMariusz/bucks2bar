@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     const months = [
         'jan', 'feb', 'mar', 'apr', 'may', 'jun',
         'jul', 'aug', 'sep', 'oct', 'nov', 'dec'
@@ -9,20 +9,13 @@ document.addEventListener('DOMContentLoaded', function () {
     ];
 
     // Get all input elements
-    function getData() {
-        const income = months.map(m => {
-            const el = document.querySelector(`input[name='income_${m}']`);
-            return el ? Number(el.value) || 0 : 0;
-        });
-        const expenses = months.map(m => {
-            const el = document.querySelector(`input[name='expenses_${m}']`);
-            return el ? Number(el.value) || 0 : 0;
-        });
-        return { income, expenses };
-    }
+    const getData = () => ({
+        income: months.map(m => Number(document.querySelector(`input[name='income_${m}']`)?.value) || 0),
+        expenses: months.map(m => Number(document.querySelector(`input[name='expenses_${m}']`)?.value) || 0)
+    });
 
     let barChart = null;
-    function renderChart() {
+    const renderChart = () => {
         const ctx = document.getElementById('barChart').getContext('2d');
         const { income, expenses } = getData();
         if (barChart) barChart.destroy();
@@ -48,16 +41,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 plugins: {
                     legend: { position: 'top' },
                     title: { display: true, text: 'Monthly Income vs Expenses' },
-                    // Add datalabels plugin config
                     datalabels: {
                         anchor: 'center',
                         align: 'center',
                         color: '#222',
                         font: { weight: 'bold' },
                         rotation: -90,
-                        formatter: function(value) {
-                            return value;
-                        }
+                        formatter: value => value
                     }
                 },
                 scales: {
@@ -66,14 +56,14 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             plugins: [ChartDataLabels]
         });
-    }
+    };
 
     // Show chart when Chart tab is clicked
     document.getElementById('chart-tab').addEventListener('shown.bs.tab', renderChart);
 
     // Update chart if data changes while on Chart tab
     document.querySelectorAll("input[type='number']").forEach(input => {
-        input.addEventListener('input', function () {
+        input.addEventListener('input', () => {
             if (document.getElementById('chart').classList.contains('active')) {
                 renderChart();
             }
@@ -81,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Download chart as image
-    document.getElementById('downloadBtn').addEventListener('click', function () {
+    document.getElementById('downloadBtn').addEventListener('click', () => {
         const canvas = document.getElementById('barChart');
         const link = document.createElement('a');
         link.href = canvas.toDataURL('image/png');
