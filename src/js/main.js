@@ -92,4 +92,31 @@ document.addEventListener('DOMContentLoaded', () => {
             this.classList.add('is-invalid');
         }
     });
+
+    // Send chart image via email using the Chart tab's input and button
+    document.getElementById('send-email').addEventListener('click', async () => {
+        const email = document.getElementById('email-address').value;
+        const canvas = document.getElementById('barChart');
+        const imageData = canvas.toDataURL('image/png');
+
+        if (!email) {
+            alert('Please enter a recipient email.');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/send-chart-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, image: imageData })
+            });
+            if (response.ok) {
+                alert('Email sent successfully!');
+            } else {
+                alert('Failed to send email.');
+            }
+        } catch (err) {
+            alert('Error sending email.' + err);
+        }
+    });
 });
