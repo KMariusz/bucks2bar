@@ -36,3 +36,18 @@ coverage/
 .idea/
 *.sublime-workspace
 *.sublime-project
+
+# Python cache and virtual environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.python-version
+.venv/
+venv/
+ENV/
+env/
+# Ignore test output
+htmlcov/
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
